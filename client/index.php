@@ -49,7 +49,9 @@
     </div>
   </div>
 </nav>
-
+<div class="">
+  <img class="hero_img" src="images/olasz.webp" alt="" >
+</div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

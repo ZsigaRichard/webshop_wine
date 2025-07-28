@@ -1,0 +1,114 @@
+DROP DATABASE wine_webshop;
+CREATE DATABASE wine_webshop;
+
+CREATE TABLE Users (
+    userID INT NOT NULL AUTO_INCREMENT,
+    email VARCHAR(320) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    firstname VARCHAR(255) NOT NULL,
+    lastname VARCHAR(255) NOT NULL,
+    lastlogin DATETIME,
+    PRIMARY KEY (userID)
+);
+
+CREATE TABLE Shipping_address(
+    shipping_addressID INT NOT NULL AUTO_INCREMENT,
+    userID INT NOT NULL,
+    name VARCHAR(512) NOT NULL,
+    phone_number VARCHAR(16) NOT NULL,
+    postcode  VARCHAR(10) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    floor VARCHAR(3) NOT NULL,
+    city VARCHAR(128) NOT NULL,
+    door VARCHAR(128),
+
+    PRIMARY KEY (shipping_addressID),
+    FOREIGN KEY (userID) REFERENCES Users(userID)
+);
+
+CREATE TABLE Billing_address(
+    billing_addressID INT NOT NULL AUTO_INCREMENT,
+    userID INT,
+    name VARCHAR(512) NOT NULL,
+    phone_number VARCHAR(16) NOT NULL,
+    postcode  VARCHAR(10) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    floor VARCHAR(3) NOT NULL,
+    city VARCHAR(128) NOT NULL,
+    door VARCHAR(128),
+    email VARCHAR(320) NOT NULL,
+
+    PRIMARY KEY (billing_addressID),
+    FOREIGN KEY (userID) REFERENCES Users(userID)
+);
+
+CREATE TABLE Orders(
+    orderID INT NOT NULL AUTO_INCREMENT,
+    status ENUM('Feldolgozás alatt','Csomagolás','Feladva'),
+    paying_method ENUM('utánvét', 'bankkártya', 'PayPal') NOT NULL,
+    userID int NOT NULL,
+    Name VARCHAR(512),
+    billing_addressID INT NOT NULL,
+    shipping_addressID INT NOT NULL,
+    tracking_number VARCHAR(64),
+    total INT NOT NULL,
+    date DATETIME,
+
+    PRIMARY KEY (orderID),
+    FOREIGN KEY (userID) REFERENCES Users(userID),
+    FOREIGN KEY (billing_addressID) REFERENCES Billing_address(billing_addressID),
+    FOREIGN KEY (shipping_addressID) REFERENCES Shipping_address(shipping_addressID)
+);
+
+CREATE TABLE Products(
+    product_name varchar(255) NOT NULL,
+    productID int NOT NULL AUTO_INCREMENT,
+    vintage YEAR,
+    alcohol_content TINYINT,
+    size DECIMAL(4,2),
+    country varchar(64),
+    wine_region varchar(64),
+    sweetness varchar(16),
+    type varchar(16),
+    color varchar(16),
+    variety varchar(255),
+    image varchar(255),
+    description text,
+    stock SMALLINT,
+    price MEDIUMINT,
+    
+    PRIMARY KEY (productID)
+
+);
+
+CREATE TABLE Ordered_items(
+    order_itemsID INT NOT NULL AUTO_INCREMENT,
+    orderID INT,
+    productID INT,
+    amount SMALLINT,
+
+    PRIMARY KEY (order_itemsID),
+    FOREIGN KEY (orderID) REFERENCES Orders(orderID),
+    FOREIGN KEY (productID) REFERENCES Products(productID)
+);
+
+INSERT INTO Products (product_name,vintage,alcohol_content,size,country,wine_region,sweetness,type,color,variety,image,description,stock,price)
+VALUES ("Bor neve",2024,18,0.75,"Magyarország","Badacsony","száraz","gyöngyöző bor","fehér","riesling","citrom.jpg","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",1543,2500);
+
+INSERT INTO Products (product_name,vintage,alcohol_content,size,country,wine_region,sweetness,type,color,variety,image,description,stock,price)
+VALUES ("Bor neve",2014,18,2.75,"Magyarország","Badacsony","száraz","gyöngyöző bor","rosé","riesling","ég .jpg","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",583,5500);
+
+
+CREATE INDEX idx_users_email ON Users(email);
+CREATE INDEX idx_orders_userID ON Orders(userID);
+CREATE INDEX idx_orders_status ON Orders(status);
+CREATE INDEX idx_orders_date ON Orders(date);
+CREATE INDEX idx_ordered_items_orderID ON Ordered_items(orderID);
+CREATE INDEX idx_ordered_items_productID ON Ordered_items(productID);
+CREATE INDEX idx_products_variety ON Products(variety);
+CREATE INDEX idx_products_type ON Products(type);
+CREATE INDEX idx_products_wine_region ON Products(wine_region);
+CREATE INDEX idx_products_color ON Products(color);
+CREATE INDEX idx_products_price ON Products(price);
+CREATE INDEX idx_billing_address_userID ON Billing_address(userID);
+CREATE INDEX idx_shipping_address_userID ON Shipping_address(userID);

@@ -8,7 +8,7 @@
     <link href="style.css" rel="stylesheet" />
 
 </head>
-<body>
+<body onload="addEventListenersToInputs();">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <!--<img id="logo" src="images/altinger_logo.png" alt="" width="30" height="24">-->
@@ -51,21 +51,40 @@
     </nav>
     <div class="d-flex flex-column  align-items-center" style="height: 100vh;">
         <h1 class="mb-5 mt-5">Regisztráció</h1>
-        <form>
+        <form action="input_handler.php" method="POST">
             <div class="form-floating mb-3">
-                <input name="emailInput" type="email" class="form-control" id="emailInput" placeholder="">
+                <input name="emailInput" type="email" class="form-control" id="emailInput" placeholder="" pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$">
                 <label for="emailInput">Email cím</label>
             </div>
             <div class="form-floating mb-3">
                 <input name="passwordInput" type="password" class="form-control" id="passwordInput" placeholder="">
                 <label for="passwordInput">Jelszó</label>
             </div>
-            <button type="submit" class="btn btn-primary  mx-auto d-block">Bejelentkezés</button>
+             <div class="form-floating mb-3">
+                <input name="passwordInputAgain" type="password" class="form-control" id="passwordInputAgain" placeholder="">
+                <label for="passwordInput">Jelszó mégegyszer</label>
+            </div>
+            <div id="passwdLenghtWarning" class="">
+                A jelszó 8-12 karakter hosszú legyen!
+            </div>
+            <div id="passwdNumberWarning" class="">
+                A jelszó tartalmazzon számot!
+            </div>
+            <div class="form-floating mb-3">
+                <input name="firstnameInput" type="input" class="form-control" id="firstnameInput" placeholder="">
+                <label for="firstnameInput">Vezetéknév</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input name="lastnameInput" type="input" class="form-control" id="lastnameInput" placeholder="">
+                <label for="lastnameInput">Keresztnév</label>
+            </div>
+            <button id="registrationSubmit" type="submit" class="btn btn-primary  mx-auto d-block" disabled>Regisztráció</button>
         </form>
         <div style="text-decoration: underline"><a>Elfelejtett jelszó</a></div>
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="\webshop_wine\webshop_wine\backend\functions.js"></script>
 
 </body>
 
